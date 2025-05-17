@@ -59,8 +59,8 @@
   ```html
   <!-- 团队成员卡片 -->
   <div class="creator-card">
-      <h3>参见_彬</h3>
-      <a href="https://space.bilibili.com/3546630523456013" target="_blank">前往B站</a>
+      <h3>保护名字</h3>
+      <a href="https://space.bilibili.com/*********" target="_blank">前往B站</a>
   </div>
   ```
 
