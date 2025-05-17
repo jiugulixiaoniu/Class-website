@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+    <title>版权声明 - 八年级二班</title>
+    <!-- 复用主站样式 -->
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --dark-bg: #0a0a0a;
+            --accent-purple: #6a5acd;
+            --title-font:"Poiret One", cursive;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poiret One', sans-serif;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: #fff;
+            line-height: 1.6;
+            padding-top: 60px; /* 补偿固定导航栏 */
+        }
+
+
+        /* 动态导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            z-index: 1000;
+        }
+
+
+      .countdown-item {
+          margin: 0.5rem 0;
+          padding: 0.5rem;
+          background: rgba(255,255,255,0.03);
+          border-radius: 5px;
+      }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(0, 243, 255, 0.1);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+        .play-prompt {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,243,255,0.1);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: 2px solid var(--neon-blue);
+            backdrop-filter: blur(2px);
+            animation: pulsePrompt 2s infinite;
+            font-family: var(--title-font);
+            letter-spacing: 3px;
+        }
+        .hero {
+          position: relative;
+          overflow: hidden;
+      }
+
+      #titleCanvas {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+      }
+
+      .hero h1 {
+        position: relative;
+            padding: 1rem 2rem;
+            background: linear-gradient(
+                45deg,
+                #00f3ff 0%,
+                #6a5acd 50%,
+                #ff00ff 100%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0,243,255,0.3);
+            border: 5px solid;
+            border-image: linear-gradient(
+                45deg,
+                #00f3ff,
+                #6a5acd,
+                #ff00ff
+            ) 1;
+            animation: hueRotate 5s linear infinite;
+        }
+
+        /* 保留原有科技感效果 */
+        .hero h1 {
+            background: linear-gradient(90deg, #00f3ff, #6a5acd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 35%,
+                rgba(0,230,255,0.15) 50%,
+                transparent 65%
+            );
+            transform: translate(-50%, -50%) rotate(45deg);
+            animation: scan 6s linear infinite;
+}
+        @keyframes pulsePrompt {
+            0%, 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+        /* 科技感英雄区域 */
+        .hero {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(45deg, #00172d, #000b15);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(90deg, #00f3ff, #6a5acd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+        /* 链接卡片 */
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 5%;
+        }
+
+        .link-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 2rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 243, 255, 0.1);
+        }
+
+        .link-card h3 {
+            color: var(--neon-blue);
+            margin-bottom: 1rem;
+        }
+
+        .link-card a {
+            color: #fff;
+            text-decoration: none;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .link-card a:hover {
+            background: var(--neon-blue);
+            color: var(--dark-bg);
+        }
+
+        /* 特殊卡片样式 */
+        .special-card {
+            border-color: var(--accent-purple);
+            animation: border-pulse 2s infinite;
+        }
+
+        @keyframes border-pulse {
+            0%, 100% { border-color: var(--accent-purple); }
+            50% { border-color: var(--neon-blue); }
+        }
+
+        /* 模态框样式 */
+        .modal {
+            display: flex;
+            visibility: hidden;
+            position: fixed;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+        }
+
+        .modal.active {
+            visibility: visible;
+            opacity: 1;
+            bottom: 0;
+        }
+
+        .modal-content {
+            position: relative;
+            background: rgba(10,10,10,0.95);
+            margin: auto;
+            width: 90%;
+            max-width: 800px;
+            border: 1px solid var(--neon-blue);
+            border-radius: 10px 10px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -10px 30px rgba(0,243,255,0.2);
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .close {
+            position: absolute;
+            right: 1.5rem;
+            top: 1rem;
+            color: var(--neon-blue);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .close:hover {
+            transform: rotate(90deg);
+        }
+
+        @keyframes textGlow {
+            from { filter: drop-shadow(0 0 5px rgba(0,243,255,0.3)); }
+            to { filter: drop-shadow(0 0 20px rgba(100,90,205,0.3)); }
+        }
+
+
+      /* 添加首页按钮悬停动画 */
+      .nav-home {
+          position: relative;
+          overflow: hidden;
+      }
+
+      .nav-home::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: var(--neon-blue);
+          transition: width 0.3s ease;
+      }
+
+      .nav-home:hover::after {
+          width: 100%;
+      }
+        /* 新增版权页专属样式 */
+        .legal-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 2rem;
+        }
+
+        .legal-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--neon-blue);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            animation: border-pulse 2s infinite;
+        }
+
+        .copyright-list li {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 3px solid var(--accent-purple);
+        }
+    </style>
+</head>
+<body>
+    <!-- 复用导航栏 -->
+    <nav class="navbar">
+        <h2>班级名字</h2>
+        <div class="nav-links">
+            <a href="main.html" class="nav-home">首页</a>
+            <a>本页面为版权声明页</a>
+        </div>
+    </nav>
+
+    <!-- 版权内容 -->
+    <section class="hero">
+        <canvas id="titleCanvas"></canvas>
+        <h1>版权声明/联系我们</h1>
+        <div class="legal-container">
+            <div class="legal-card">
+                <h2>📜 内容所有权声明：</h2>
+                <ul class="copyright-list">
+                  <li><h3>1.本网站美术设计，资源均为旧故里小牛（旧故里工作室）所有</h3></li>
+                  <li><h3>2.最终版权最终属于旧故里小牛所有</h3></li>
+                  <li><h3>3.本代码已开源，不得用于商业用途，其它请看github</h3></li>
+                  <li><h3>4.禁止使用本网站宣传违规行为（请看附属内容）</h3></li>
+                </ul>
+            </div>
+            <div class="legal-card">
+                <h2>📜 Content Ownership Statement:</h2>
+                <ul class="copyright-list">
+                  <li><h3>1. The art design and resources on this website are all owned by the JGL Studio</h3></li>
+                  <li><h3>2. The final copyright belongs to the JiuGuLiXiaoniu</h3></li>
+                  <li><h3>3. This code is open source and cannot be used for commercial purposes. For more information, please refer to GitHub</h3></li>
+                  <li><h3>4. Prohibit the use of this website to promote violations (please refer to the attached content)</h3></li>
+                </ul>
+            </div>
+
+            <div class="legal-card special-card">
+                <h3>⚖️ 法律规定</h3>
+                <ul class="copyright-list">
+                    <li><h2>严禁使用本网站做以下这些事：</h2></li>
+                    <h3>（1）违反宪法或法律法规规定的；
+                        （2）危害国家安全，泄露国家秘密，颠覆国家政权，破坏国家统一的；（3）损害国家荣誉和利益的，损害公共利益的；
+                        （4）歪曲、丑化、亵渎、否定英雄烈士事迹和精神，以侮辱、诽谤或者其他方式侵害英雄烈士的姓名、肖像、名誉、荣誉的；
+                        （5）煽动民族仇恨、民族歧视，破坏民族团结的；
+                        （6）破坏国家宗教政策，宣扬邪教和封建迷信的；
+                        （7）散布谣言，扰乱社会秩序，破坏社会稳定的；
+                        （8）散布淫秽、色情、赌博、暴力、凶杀、恐怖或者教唆犯罪的；
+                        （9）侮辱或者诽谤他人，侵害他人合法权益的；
+                        （10）含有法律、行政法规禁止的其他内容的。 </h3>
+                    <li><h2>如发现任何违规行为，请立即联系我们</h2></li>
+                </ul>
+            </div>
+
+            <div class="link-card">
+                <h3>📮 联系我们/加入我们</h3>
+                <a href="youremail" class="neon-link">
+                    发送邮件 →
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- 复用JavaScript -->
+<script>
+    // ================= 全局常量 =================
+    const particles = [];
+
+    // ================= 粒子系统 =================
+    class Particle {
+        constructor(canvas, ctx) {
+            this.canvas = canvas;
+            this.ctx = ctx;
+            this.reset();
+        }
+
+        reset() {
+            this.x = Math.random() * this.canvas.width;
+            this.y = Math.random() * this.canvas.height;
+            this.vx = (Math.random() - 0.5) * 2;
+            this.vy = (Math.random() - 0.5) * 2;
+            this.radius = Math.random() * 3;
+            this.color = `rgba(0, 243, 255, ${Math.random() * 0.6})`;
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > this.canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > this.canvas.height) this.vy *= -1;
+
+            this.ctx.beginPath();
+            this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            this.ctx.fillStyle = this.color;
+            this.ctx.fill();
+        }
+    }
+
+    // ================= 模态框系统 =================
+    function initModal() {
+        const modal = document.getElementById('aboutModal');
+        const closeBtn = document.querySelector('.close');
+
+        document.querySelector('a[href="#about"]').addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.style.visibility = 'visible';
+            setTimeout(() => modal.classList.add('active'), 10);
+        });
+
+        function closeModal() {
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.visibility = 'hidden', 500);
+        }
+
+        closeBtn.addEventListener('click', closeModal);
+        window.addEventListener('click', (e) => e.target === modal && closeModal());
+        document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
+    }
+
+    // ================= 主初始化 =================
+    document.addEventListener('DOMContentLoaded', () => {
+        // 初始化粒子系统
+        const canvas = document.getElementById('titleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            for(let i = 0; i < 300; i++) {
+                particles.push(new Particle(canvas, ctx));
+            }
+            animate();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => p.update());
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles.forEach(p => p.reset());
+        });
+
+        // 初始化各模块
+        initParticles();
+        initModal();
+        // 导航栏按钮动画
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if(this.hash === '#top') {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    this.classList.add('click-feedback');
+                    setTimeout(() => this.classList.remove('click-feedback'), 300);
+                }
+            });
+        });
+
+        // 平滑滚动备用方案
+        if(!('scrollBehavior' in document.documentElement.style)) {
+            document.querySelector('.nav-home').addEventListener('click', (e) => {
+                e.preventDefault();
+                const scrollStep = -window.scrollY / (500 / 15);
+                const scrollInterval = setInterval(() => {
+                    if(window.scrollY !== 0) {
+                        window.scrollBy(0, scrollStep);
+                    } else {
+                        clearInterval(scrollInterval);
+                    }
+                }, 15);
+            });
+        }
+    });
+    </script>
+</body>
+</html>

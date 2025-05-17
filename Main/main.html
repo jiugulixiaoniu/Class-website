@@ -1,0 +1,1387 @@
+
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+    <title>八年级二班 - 南平市建阳第二中学官方网站</title>
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --dark-bg: #0a0a0a;
+            --accent-purple: #6a5acd;
+            --title-font:"Poiret One", cursive;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poiret One', sans-serif;
+            /*font-other:'Segoe UI', sans-serif;*/
+
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: #fff;
+            line-height: 1.6;
+            padding-top: 60px; /* 补偿固定导航栏 */
+        }
+
+        .real-time {
+            display: inline-flex;  /* 原flex */
+            align-items: center;
+            gap: 0.5rem;  /* 原0.8rem */
+            padding: 0.5rem 0;  /* 原0.5rem 0 */
+            font-size: 1.5rem;  /* 原1.2rem */
+            letter-spacing: 1px;  /* 原2px */
+            color: rgba(0, 243, 255, 0.9);
+            text-shadow: 0 0 10px rgba(0,243,255,0.3);
+            animation: timeGlow 5s ease-in-out infinite alternate;
+            white-space: nowrap;  /* 新增 */
+        }
+        #adminStatus {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #adminStatus button {
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        #adminStatus button:hover {
+            background: rgba(255,68,68,0.1) !important;
+        }
+
+        @keyframes timeGlow {
+            from { opacity: 0.7; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .real-time-container {
+                padding: 1rem 3rem;
+                transform: translateY(-5px);
+            }
+            .real-time {
+                font-size: 1rem;
+                letter-spacing: 1px;
+            }
+        }
+
+        .real-time span {
+        display: inline-block;
+        min-width: 2.5em;
+        text-align: center;
+        transition: color 0.3s;
+        }
+
+        .real-time:hover span {
+            color: var(--accent-purple);
+        }
+        /* 动态导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            z-index: 1000;
+        }
+
+        .real-time-container {
+          position: relative;
+          display: inline-block;
+          padding: 0.7rem 2rem;
+          background: rgba(0,243,255,0.05);
+          border-radius: 10px;
+          cursor: pointer;
+          transition: all 0.3s;
+          margin-top: 0.5rem; /* 调整上边距 */
+          transform: translateY(20px); /* 微调位置 */
+          max-width: 90%;
+      }
+
+      .time-tooltip {
+          position: absolute;
+          bottom: 120%;  /* 原100% */
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(10,10,10,0.95);
+          padding: 1rem;  /* 原1rem */
+          border-radius: 8px;
+          border: 1px solid var(--neon-blue);
+          box-shadow: 0 0 15px rgba(0,243,255,0.2);
+          opacity: 0;
+          transition: opacity 0.3s;
+          min-width: 600px;  /* 原280px */
+          pointer-events: none;
+      }
+
+      .real-time-container:hover .time-tooltip {
+          opacity: 1;
+      }
+
+
+      .countdown-item {
+          margin: 0.5rem 0;
+          padding: 0.5rem;
+          background: rgba(255,255,255,0.03);
+          border-radius: 5px;
+      }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(0, 243, 255, 0.1);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+        .play-prompt {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,243,255,0.1);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: 2px solid var(--neon-blue);
+            backdrop-filter: blur(2px);
+            animation: pulsePrompt 2s infinite;
+            font-family: var(--title-font);
+            letter-spacing: 3px;
+        }
+        .hero {
+          position: relative;
+          overflow: hidden;
+      }
+
+      #titleCanvas {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+      }
+
+      .hero h1 {
+        position: relative;
+            padding: 1rem 2rem;
+            background: linear-gradient(
+                45deg,
+                #00f3ff 0%,
+                #6a5acd 50%,
+                #ff00ff 100%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0,243,255,0.3);
+            border: 5px solid;
+            border-image: linear-gradient(
+                45deg,
+                #00f3ff,
+                #6a5acd,
+                #ff00ff
+            ) 1;
+            animation: hueRotate 5s linear infinite;
+        }
+
+        /* 保留原有科技感效果 */
+        .hero h1 {
+            background: linear-gradient(90deg, #00f3ff, #6a5acd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 35%,
+                rgba(0,230,255,0.15) 50%,
+                transparent 65%
+            );
+            transform: translate(-50%, -50%) rotate(45deg);
+            animation: scan 6s linear infinite;
+}
+        @keyframes pulsePrompt {
+            0%, 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+        /* 科技感英雄区域 */
+        .hero {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(45deg, #00172d, #000b15);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(90deg, #00f3ff, #6a5acd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+        /* 链接卡片 */
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 5%;
+        }
+
+        .link-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 2rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 243, 255, 0.1);
+        }
+
+        .link-card h3 {
+            color: var(--neon-blue);
+            margin-bottom: 1rem;
+        }
+
+        .link-card a {
+            color: #fff;
+            text-decoration: none;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .link-card a:hover {
+            background: var(--neon-blue);
+            color: var(--dark-bg);
+        }
+
+        /* 特殊卡片样式 */
+        .special-card {
+            border-color: var(--accent-purple);
+            animation: border-pulse 2s infinite;
+        }
+
+        @keyframes border-pulse {
+            0%, 100% { border-color: var(--accent-purple); }
+            50% { border-color: var(--neon-blue); }
+        }
+
+        /* 模态框样式 */
+        .modal {
+            display: flex;
+            visibility: hidden;
+            position: fixed;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+        }
+
+        .modal.active {
+            visibility: visible;
+            opacity: 1;
+            bottom: 0;
+        }
+        .article-list {
+            display: grid;
+            gap: 1.5rem;
+            padding: 2rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .article-list .link-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .article-list .link-card:hover {
+            transform: translateY(-3px);
+            background: rgba(0, 243, 255, 0.05);
+        }
+
+        .article-link {
+            border-color: var(--accent-purple) !important;
+            background: rgba(106, 90, 205, 0.1) !important;
+        }
+
+        .article-link:hover {
+            background: var(--accent-purple) !important;
+        }
+        .modal-content {
+            position: relative;
+            background: rgba(10,10,10,0.95);
+            margin: auto;
+            width: 90%;
+            max-height: 100vh; /* 改为视口高度 */
+            overflow-y: auto; /* 添加滚动条 */
+            border: 1px solid var(--neon-blue);
+            border-radius: 10px 10px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -10px 30px rgba(0,243,255,0.2);
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        @media (min-width: 768px) {
+            .real-time {
+                flex-wrap: wrap;
+                gap: 0.3rem;
+            }
+            .real-time::before,
+            .real-time::after {
+                display: none; /* 移动端隐藏装饰线 */
+            }
+            .modal-content {
+                border-radius: 10px;
+                transform: translateY(50px);
+                margin: 5% auto;
+            }
+        }
+        @media (max-width: 480px) {
+            .real-time {
+                flex-wrap: wrap;  /* 新增 */
+                gap: 0.3rem;  /* 新增 */
+                font-size: 0.8rem;  /* 新增 */
+                white-space: normal;  /* 新增 */
+            }
+            .real-time span {
+                min-width: auto;  /* 原1.8em */
+                padding: 0 0.2rem;  /* 新增 */
+            }
+            .time-tooltip {
+                min-width: 180px;  /* 新增 */
+                font-size: 0.8rem;  /* 新增 */
+            }
+        }
+        .close {
+            position: absolute;
+            right: 1.5rem;
+            top: 1rem;
+            color: var(--neon-blue);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .close:hover {
+            transform: rotate(90deg);
+        }
+
+        /* 开发团队样式 */
+        .creator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .creator-card {
+            background: rgba(255,255,255,0.03);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(0,243,255,0.1);
+        }
+
+        .placeholder {
+            opacity: 0.6;
+            border-style: dashed;
+        }
+
+        @keyframes textGlow {
+            from { filter: drop-shadow(0 0 5px rgba(0,243,255,0.3)); }
+            to { filter: drop-shadow(0 0 20px rgba(100,90,205,0.3)); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .real-time-container {
+                padding: 0.5rem 0.8rem;  /* 原0.8rem 1.2rem */
+                transformX(100);  /* 移除偏移 */
+            }
+            .real-time {
+                font-size: 0.9rem;  /* 原1rem */
+                letter-spacing: 0.5px;  /* 原1px */
+            }
+            .time-tooltip {
+                min-width: 300px;  /* 新增 */
+                left: 20px !important;  /* 新增 */
+                transform: none !important;  /* 新增 */
+            }
+        }
+        .music-player {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 3000;
+          background: rgba(10,10,10,0.9);
+          border: 1px solid var(--neon-blue);
+          border-radius: 15px;
+          padding: 1rem;
+          width: 300px;
+          backdrop-filter: blur(5px);
+          box-shadow: 0 0 20px rgba(0,243,255,0.2);
+      }
+
+        .player-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .song-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            color: var(--neon-blue);
+        }
+
+        .progress {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .progress::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .progress::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .play-btn {
+            background: none;
+            border: 1px solid var(--neon-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-btn:hover {
+            background: rgba(0,243,255,0.1);
+            transform: rotate(180deg);
+        }
+
+        .play-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--neon-blue);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .music-player {
+                width: 260px;
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+      html {
+    scroll-behavior: smooth;
+}
+
+      /* 添加首页按钮悬停动画 */
+      .nav-home {
+          position: relative;
+          overflow: hidden;
+      }
+
+      .nav-home::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: var(--neon-blue);
+          transition: width 0.3s ease;
+      }
+
+      .nav-home:hover::after {
+          width: 100%;
+      }
+      .login-modal {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: rgba(10,10,10,0.95);
+          padding: 2rem;
+          border: 2px solid var(--neon-blue);
+          border-radius: 10px;
+          width: 400px;
+          max-width: 90%;
+          z-index: 3000;
+          display: none;
+          box-shadow: 0 0 30px rgba(0,243,255,0.2);
+      }
+
+      .login-modal.active {
+          display: block;
+          animation: modalAppear 0.5s ease;
+      }
+      .hud-notification {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: rgba(0,243,255,0.1);
+          border: 1px solid var(--neon-blue);
+          padding: 1rem 2rem;
+          border-radius: 8px;
+          animation: hudFade 2s forwards;
+          backdrop-filter: blur(5px);
+      }
+
+      @keyframes hudFade {
+          0% { opacity: 0; transform: translateY(-20px); }
+          20% { opacity: 1; transform: translateY(0); }
+          80% { opacity: 1; transform: translateY(0); }
+          100% { opacity: 0; transform: translateY(-20px); }
+      }
+      @keyframes modalAppear {
+          from { opacity: 0; transform: translate(-50%, -60%); }
+          to { opacity: 1; transform: translate(-50%, -50%); }
+      }
+
+      .login-input {
+          width: 100%;
+          padding: 1rem;
+          margin: 1rem 0;
+          background: rgba(0,243,255,0.05);
+          border: 1px solid var(--neon-blue);
+          color: var(--neon-blue);
+          border-radius: 6px;
+          font-family: monospace;
+          letter-spacing: 2px;
+      }
+      .login-error-box {
+          position: relative;
+          margin-top: 1rem;
+          padding: 1rem;
+          background: rgba(255,68,68,0.1);
+          border: 1px solid #ff4444;
+          border-radius: 8px;
+          animation: errorShake 0.5s;
+          display: flex;
+          gap: 1rem;
+      }
+
+      .error-icon {
+          font-size: 1.5em;
+          color: #ff4444;
+      }
+
+      .error-content h3 {
+          color: #ff8888;
+          margin-bottom: 0.5rem;
+      }
+
+      @keyframes errorShake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-5px); }
+          75% { transform: translateX(5px); }
+      }
+      .login-btn {
+          width: 100%;
+          padding: 1rem;
+          background: linear-gradient(45deg, #00f3ff, #6a5acd);
+          border: none;
+          color: white;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: 0.3s;
+      }
+
+      .login-btn:hover {
+          opacity: 0.9;
+          box-shadow: 0 0 15px rgba(0,243,255,0.3);
+      }
+
+      .admin-panel {
+          position: fixed;
+          top: 80px;
+          right: 20px;
+          background: rgba(10,10,10,0.9);
+          padding: 1rem;
+          border: 1px solid var(--neon-blue);
+          border-radius: 8px;
+          display: none;
+          backdrop-filter: blur(5px);
+      }
+
+      .format-hint {
+          color: #6a5acd;
+          font-size: 0.9em;
+          margin: -0.5rem 0 1rem;
+          text-align: center;
+      }
+      .Attention {
+          color: #ffffff;
+          font-size: 1em;
+          text-align: center;
+      }
+    </style>
+</head>
+<body>
+    <!-- 关于模态框 -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>开发团队<span style="color: var(--neon-blue)">✦</span></h2>
+            <div class="creator-grid">
+                <div class="creator-card">
+                  <h2><div style=<"icon">Developer</div></h2>
+                    <h3>参见_彬</h3>
+                    <p style="color: #888">@Stu_CanJianBin</p>
+                    <a href="https://space.bilibili.com/3546630523456013"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="social-link"
+                       data-platform="bilibili"
+                       style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border: 1px solid var(--neon-blue); border-radius: 5px; color: var(--neon-blue); text-decoration: none;">
+                       <svg class="platform-icon" viewBox="0 0 32 32" width="20" height="20">
+                           <path d="M16.7 5.3l9.3 9.4-9.3 9.3-1.4-1.4 7.9-7.9H5v-2h18.2l-7.9-7.9 1.4-1.4z"/>
+                       </svg>
+                       前往B站
+                    </a>
+                </div>
+                    <div class="creator-card">
+                    <h2><div style=<"icon">Main Developer</div></h2>
+                    <h3>旧故里小牛</h3>
+                    <p style="color: #888">@Stu_JiuGuLiXiaoNiu</p>
+                    <a href="https://space.bilibili.com/3546617818909179"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="social-link"
+                       data-platform="CSDN"
+                       style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border: 1px solid var(--neon-blue); border-radius: 5px; color: var(--neon-blue); text-decoration: none;">
+                       <svg class="platform-icon" viewBox="0 0 32 32" width="20" height="20">
+                           <path d="M16.7 5.3l9.3 9.4-9.3 9.3-1.4-1.4 7.9-7.9H5v-2h18.2l-7.9-7.9 1.4-1.4z"/>
+                       </svg>
+                       前往B站
+                    </a>
+                </div>
+                <!-- 5个预留位 -->
+                <div class="creator-card placeholder"><div class="creator-icon">⭐</div><h3>预留位2</h3><p class="creator-id">待添加...</p><button class="creator-link disabled">即将开放</button></div>
+                <div class="creator-card placeholder"><div class="creator-icon">⭐</div><h3>预留位3</h3><p class="creator-id">待添加...</p><button class="creator-link disabled">即将开放</button></div>
+                <div class="creator-card placeholder"><div class="creator-icon">⭐</div><h3>预留位4</h3><p class="creator-id">待添加...</p><button class="creator-link disabled">即将开放</button></div>
+                <div class="creator-card placeholder"><div class="creator-icon">⭐</div><h3>预留位5</h3><p class="creator-id">待添加...</p><button class="creator-link disabled">即将开放</button></div>
+                </div>
+                    <div class="creator-card">
+                    <h2>查看版权说明</h2>
+                    <p style="color: #888">Copyright</p>
+                    <a href="CopyRight.html"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="social-link"
+                       style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border: 1px solid var(--neon-blue); border-radius: 5px; color: var(--neon-blue); text-decoration: none;">
+                       <svg class="platform-icon" viewBox="0 0 32 32" width="60" height="10">
+                           <path d="M16.7 5.3l9.3 9.4-9.3 9.3-1.4-1.4 7.9-7.9H5v-2h18.2l-7.9-7.9 1.4-1.4z"/>
+                       </svg>
+                        点此处查看
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    <nav class="navbar">
+        <h2>“班级名称”</h2>
+        <div class="nav-links">
+            <a href="#top" class="nav-home">首页</a>
+            <a href="#about">关于</a>
+            <a href="CopyRight.html">联系</a>
+            <div id="adminStatus" style="display: none;">
+                <a href="GuanLi.html" style="color: var(--neon-blue); margin-right: 1rem;">账户已登陆</a>
+                <button onclick="logout()" style="background: none; border: 1px solid #ff4444; color: #ff4444; padding: 0.3rem 0.8rem; border-radius: 4px;">退出</button>
+            </div>
+            <a href="javascript:void(0)" onclick="showLogin()" id="loginLink">登录</a>
+
+        </div>
+    </nav>
+
+    <section class="hero">
+        <canvas id="titleCanvas"></canvas>
+        <h1>班级名称</h1>
+        <h4><p>英文翻译</p></h4>
+        <h2>口号</h2>
+      <h2><div class="real-time-container"></div></h2>
+    </section>
+
+    <div class="link-grid">
+        <div class="link-card special-card">
+            <h3>🏆 成绩系统</h3>
+            <p>查询考试成绩</p>
+            <a href=""
+               target="_blank"
+               class="video-link">
+               立即查询 →
+            </a>
+            <!>
+        </div>
+
+        <div class="link-card special-card">
+            <h3>🎬 精彩瞬间</h3>
+            <p>我们的风采</p>
+            <a href="javascript:void(0)"
+               class="video-link"
+               id="showArticles">
+                点击查看
+            </a>
+        </div>
+        <div class="link-card special-card">
+            <h3>百宝箱</h3>
+            <p>挺好玩的………………</p>
+            <a href="TreasureBox.html"
+               target="_blank"
+               class="video-link">
+                前往百宝箱 →
+            </a>
+        </div>
+    </div>
+
+    <div class="music-player">
+        <div class="player-container">
+            <div class="song-info">
+              <span class="song-title">正在播放：<h2>Xenogenesis</h2></span>
+                <span class="time">00:00 / 03:53</span>
+            </div>
+            <input type="range" class="progress" value="0">
+            <div class="controls">
+                <button class="play-btn">
+                    <svg class="play-icon" viewBox="0 0 24 24">
+                        <!-- 播放/暂停图标 -->
+                        <path class="play" d="M8 5v14l11-7z"/>
+                        <path class="pause" d="M6 4h4v16H6zm8 0h4v16h-4z" style="display: none;"/>
+                    </svg>
+                </button>
+                <audio id="bgm" loop>
+                    <source src="music.ogg" type="audio/ogg">
+                    您的浏览器不支持音频播放
+                </audio>
+            </div>
+        </div>
+    </div>
+    <div id="articleModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>精彩回放<span style="color: var(--neon-blue)">✦</span></h2>
+            <div class="article-list">
+                <div class="link-card" data-article="Article\article1.html">
+                    <h3>你的文章标题</h3>
+                    <p>你的简介</p>
+                    <a class="article-link">查看详情 →</a>
+                </div>
+                <!-- 添加更多文章卡片 -->
+            </div>
+        </div>
+    </div>
+    <div class="login-modal" id="loginModal">
+        <h1 style="text-align: center; margin-bottom: 1rem;">Log in</h1>
+        <div class="format-hint">格式：5组大写字母/数字，用空格分隔</div>
+
+        <input type="text" class="login-input" id="username" placeholder="用户名" autocomplete="off">
+        <input type="text" class="login-input" id="licenseKey" placeholder="ABCDE 12345 FGHIJ 67890 KLMNO" autocomplete="off">
+        <button class="login-btn" onclick="handleLogin()">身份验证</button>
+        <h4 class="Attention"><br>注意:本登录功能暂时仅管理员开放<br>普通用户请不要尝试注册/登录</h4>
+    </div>
+
+
+    <script>
+    // ================= 全局常量 =================
+    const particles = [];
+    const events = [
+        { name: '活动名称', date: '2025-06-21' },//date填写日期
+    ];
+
+    // ================= 粒子系统 =================
+    class Particle {
+        constructor(canvas, ctx) {
+            this.canvas = canvas;
+            this.ctx = ctx;
+            this.reset();
+        }
+
+        reset() {
+            this.x = Math.random() * this.canvas.width;
+            this.y = Math.random() * this.canvas.height;
+            this.vx = (Math.random() - 0.5) * 2;
+            this.vy = (Math.random() - 0.5) * 2;
+            this.radius = Math.random() * 2;
+            this.color = `rgba(0, 243, 255, ${Math.random() * 0.6})`;
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > this.canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > this.canvas.height) this.vy *= -1;
+
+            this.ctx.beginPath();
+            this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            this.ctx.fillStyle = this.color;
+            this.ctx.fill();
+        }
+    }
+
+    // ================= 时间模块 =================
+    function updateRealTime() {
+        const container = document.querySelector('.real-time-container');
+        if (!container) return;
+
+        const now = new Date();
+        container.innerHTML = `
+            <div class="real-time">
+                ${now.toLocaleDateString('zh-CN')}
+                ${["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][now.getDay()]}
+                ${now.toLocaleTimeString('zh-CN', {hour12: false})}
+            </div>
+            <div class="time-tooltip">
+                ${events.map(e => `
+                    <div class="countdown-item">
+                        ${e.name}：<span style="color:var(--neon-blue)">
+                        ${Math.ceil((new Date(e.date)-now)/86400000)} Day</span>
+                    </div>`
+                ).join('')}
+            </div>
+        `;
+        setTimeout(updateRealTime, 1000);
+    }
+
+    // ================= 音乐播放器（修复版） =================
+    function initMusicPlayer() {
+        const audio = document.getElementById('bgm');
+        const playBtn = document.querySelector('.play-btn');
+        const progress = document.querySelector('.progress');
+        const timeDisplay = document.querySelector('.time');
+        const playIcon = document.querySelector('.play');
+        const pauseIcon = document.querySelector('.pause');
+
+        let isFirstInteraction = true;
+        let autoPlayAttempted = false;
+
+        // 播放状态同步
+        function updateButton(playing) {
+            playIcon.style.display = playing ? 'none' : 'block';
+            pauseIcon.style.display = playing ? 'block' : 'none';
+        }
+
+        // 核心修复：全局点击处理
+        function handleFirstInteraction() {
+            if (isFirstInteraction) {
+                isFirstInteraction = false;
+                audio.muted = false;
+                try {
+                    audio.play();
+                } catch (err) {
+                    console.log('播放失败:', err);
+                }
+                document.querySelectorAll('.play-prompt').forEach(p => p.remove());
+            }
+        }
+
+        // 自动播放策略
+        function attemptAutoPlay() {
+            if (autoPlayAttempted) return;
+            autoPlayAttempted = true;
+
+            audio.muted = true;
+            audio.play()
+                .then(() => {
+                    showUnmutePrompt();
+                })
+                .catch(err => {
+                    console.log('自动播放被阻止:', err);
+                    showPlayPrompt();
+                });
+        }
+
+        // 显示播放提示
+        function showPlayPrompt() {
+            const prompt = document.createElement('div');
+            prompt.innerHTML = `
+                <div class="play-prompt">
+                    <h2><p>Welcome to this web</p></h2>
+                </div>
+            `;
+            document.body.appendChild(prompt);
+        }
+
+        // 显示取消静音提示
+        function showUnmutePrompt() {
+            const prompt = document.createElement('div');
+            audio.muted = false;
+        }
+
+        // 事件监听
+        document.addEventListener('click', handleFirstInteraction);
+        document.addEventListener('touchstart', handleFirstInteraction);
+
+        playBtn.addEventListener('click', () => {
+            audio.paused ? audio.play() : audio.pause();
+        });
+
+        audio.addEventListener('play', () => updateButton(true));
+        audio.addEventListener('pause', () => updateButton(false));
+
+        progress.addEventListener('input', (e) => {
+            audio.currentTime = (e.target.value / 100) * audio.duration;
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            const progressPercent = (audio.currentTime / audio.duration) * 100;
+            progress.value = progressPercent;
+            timeDisplay.textContent =
+                `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+        });
+
+        // 格式化时间
+        function formatTime(secs) {
+            const minutes = Math.floor(secs / 60);
+            const seconds = Math.floor(secs % 60);
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // 初始化
+        setTimeout(attemptAutoPlay, 0); // 延迟1秒尝试自动播放
+    }
+
+    // ================= 模态框系统 =================
+    function initModal() {
+        const modal = document.getElementById('aboutModal');
+        const closeBtn = document.querySelector('.close');
+
+        document.querySelector('a[href="#about"]').addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.style.visibility = 'visible';
+            setTimeout(() => modal.classList.add('active'), 10);
+        });
+
+        function closeModal() {
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.visibility = 'hidden', 500);
+        }
+
+        closeBtn.addEventListener('click', closeModal);
+        window.addEventListener('click', (e) => e.target === modal && closeModal());
+        document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
+    }
+
+    // ================= 主初始化 =================
+    document.addEventListener('DOMContentLoaded', () => {
+        // 初始化粒子系统
+        const canvas = document.getElementById('titleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            for(let i = 0; i < 200; i++) {
+                particles.push(new Particle(canvas, ctx));
+            }
+            animate();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => p.update());
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles.forEach(p => p.reset());
+        });
+
+        // 初始化各模块
+        initParticles();
+        initMusicPlayer();
+        initModal();
+        updateRealTime();
+
+        // 导航栏按钮动画
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if(this.hash === '#top') {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    this.classList.add('click-feedback');
+                    setTimeout(() => this.classList.remove('click-feedback'), 300);
+                }
+            });
+        });
+
+        // 平滑滚动备用方案
+        if(!('scrollBehavior' in document.documentElement.style)) {
+            document.querySelector('.nav-home').addEventListener('click', (e) => {
+                e.preventDefault();
+                const scrollStep = -window.scrollY / (500 / 15);
+                const scrollInterval = setInterval(() => {
+                    if(window.scrollY !== 0) {
+                        window.scrollBy(0, scrollStep);
+                    } else {
+                        clearInterval(scrollInterval);
+                    }
+                }, 15);
+            });
+        }
+    });
+    function initArticleModal() {
+    const modal = document.getElementById('articleModal');
+    const closeBtn = modal.querySelector('.close');
+    document.getElementById('showArticles').addEventListener('click', (e) => {
+          e.preventDefault();
+          modal.style.visibility = 'visible';
+          setTimeout(() => modal.classList.add('active'), 10);
+      });
+
+      function closeModal() {
+          modal.classList.remove('active');
+          setTimeout(() => modal.style.visibility = 'hidden', 500);
+      }
+
+      // 文章点击处理
+      document.querySelectorAll('.article-link').forEach(link => {
+          link.addEventListener('click', function() {
+              const articleUrl = this.closest('.link-card').dataset.article;
+              window.location.href = articleUrl;
+              closeModal();
+          });
+      });
+
+      closeBtn.addEventListener('click', closeModal);
+      window.addEventListener('click', (e) => e.target === modal && closeModal());
+      document.addEventListener('keydown', (e) => e.key === 'Escape' && closeModal());
+  }
+
+  // 在DOMContentLoaded事件中添加初始化
+    document.addEventListener('DOMContentLoaded', () => {
+        // ...其他初始化代码...
+        initArticleModal(); // 新增这一行
+    });
+    // 自动格式化输入
+    document.getElementById('licenseKey').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/ /g, '').toUpperCase();
+        let formatted = '';
+
+        for (let i = 0; i < value.length; i++) {
+            if (i > 0 && i % 5 === 0) formatted += ' ';
+            formatted += value[i];
+        }
+
+        e.target.value = formatted.substring(0, 29);
+    });
+
+    // 生成哈希函数
+    async function generateHash(str) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(str);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(hashBuffer))
+            .map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // 登录处理
+    async function handleLogin() {
+        const rawUsername = document.getElementById('username').value.trim();
+        const rawPassword = document.getElementById('licenseKey').value
+            .replace(/ /g, '')  // 移除所有空格
+            .toUpperCase();      // 转换为大写
+
+        try {
+            // 基础验证
+            if (!rawUsername) throw new Error('USERNAME_EMPTY');
+            if (!rawPassword) throw new Error('PASSWORD_EMPTY');
+            if (rawPassword.length !== 15 && rawPassword.length !== 25)
+                throw new Error('PASSWORD_LENGTH');
+
+            // API请求
+            const response = await fetch('http://localhost:5000/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: rawUsername,
+                    password: rawPassword
+                })
+            });
+
+            // 处理响应
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'AUTH_FAILED');
+            }
+
+            // 登录成功处理
+            const { username, display_name, permission, token } = await response.json();
+
+            // 存储认证信息
+            localStorage.setItem('adminAuth', JSON.stringify({
+                username: username,
+                displayName: display_name,
+                permission: permission,
+                loginTime: Date.now(),
+                token: token
+            }));
+
+            // 视觉反馈
+            showHUDNotification('✔ 登录成功');
+            document.getElementById('loginModal').classList.remove('active');
+            setTimeout(() => window.location.reload(), 800);
+
+        } catch (error) {
+            // 错误处理
+            const errorMap = {
+                'USERNAME_EMPTY': {
+                    message: '用户名不能为空',
+                    detail: '请输入有效的用户名'
+                },
+                'PASSWORD_EMPTY': {
+                    message: '密码不能为空',
+                    detail: '请输入有效的访问密钥'
+                },
+                'PASSWORD_LENGTH': {
+                    message: '密码格式错误',
+                    detail: '密钥必须为25位大写字母/数字'
+                },
+                'AUTH_FAILED': {
+                    message: '认证失败',
+                    detail: '用户名或密码不匹配'
+                }
+            };
+
+            const { message, detail } = errorMap[error.message] || {
+                message: '系统错误',
+                detail: '请稍后重试'
+            };
+
+            // 显示错误提示
+            const errorBox = document.createElement('div');
+            errorBox.className = 'login-error-box';
+            errorBox.innerHTML = `
+                <div class="error-icon">⚠</div>
+                <div class="error-content">
+                    <h3>${message}</h3>
+                    <p>${detail}</p>
+                </div>
+            `;
+
+            document.getElementById('loginModal').appendChild(errorBox);
+            setTimeout(() => errorBox.remove(), 5000);
+        }
+    }
+    function updateNavState() {
+        const navs = document.querySelectorAll('#adminStatus, #loginLink');
+        navs.forEach(nav => {
+            if(localStorage.getItem('adminAuth')) {
+                nav.style.display = nav.id === 'adminStatus' ? 'flex' : 'none';
+            } else {
+                nav.style.display = nav.id === 'loginLink' ? 'block' : 'none';
+            }
+        });
+    }
+    function handleLoginError(error) {
+    const errorMap = {
+        'INVALID_FORMAT': {
+            message: '格式验证失败',
+            detail: '请检查密钥格式（5组大写字母/数字，空格分隔）'
+        },
+        'AUTH_FAILED': {
+            message: '认证未通过',
+            detail: '用户名或密钥不匹配'
+        },
+        'default': {
+            message: '系统异常',
+            detail: '请尝试刷新页面后重新登录'
+        }
+    };
+
+    const {message, detail} = errorMap[error.message] || errorMap.default;
+
+    // 动态错误提示
+    const errorBox = document.createElement('div');
+    errorBox.className = 'login-error-box';
+    errorBox.innerHTML = `
+        <div class="error-icon">⚠</div>
+        <div class="error-content">
+            <h3>${message}</h3>
+            <p>${detail}</p>
+        </div>
+    `;
+
+    document.getElementById('loginModal').appendChild(errorBox);
+    setTimeout(() => errorBox.remove(), 5000);
+    }
+    function handleLoginError(error) {
+        const errorMap = {
+            'INVALID_FORMAT': {
+                message: '格式验证失败',
+                detail: '请检查密钥格式（5组大写字母/数字，空格分隔）'
+            },
+            'AUTH_FAILED': {
+                message: '认证未通过',
+                detail: '用户名或密钥不匹配'
+            },
+            'default': {
+                message: '系统异常',
+                detail: '请尝试刷新页面后重新登录'
+            }
+        };
+
+        const {message, detail} = errorMap[error.message] || errorMap.default;
+
+        // 动态错误提示
+        const errorBox = document.createElement('div');
+        errorBox.className = 'login-error-box';
+        errorBox.innerHTML = `
+            <div class="error-icon">⚠</div>
+            <div class="error-content">
+                <h3>${message}</h3>
+                <p>${detail}</p>
+            </div>
+        `;
+
+        document.getElementById('loginModal').appendChild(errorBox);
+        setTimeout(() => errorBox.remove(), 5000);
+    }
+    function showHUDNotification(text) {
+        const hud = document.createElement('div');
+        hud.className = 'hud-notification';
+        hud.textContent = text;
+        document.body.appendChild(hud);
+        setTimeout(() => hud.remove(), 2000);
+    }
+    // 显示登录框
+    function showLogin() {
+        document.getElementById('loginModal').classList.add('active');
+        document.getElementById('username').value = '';
+        document.getElementById('licenseKey').value = '';
+    }
+
+    // 退出登录
+    function logout() {
+      localStorage.removeItem('adminAuth');
+      document.getElementById('adminStatus').style.display = 'none';
+      document.getElementById('loginLink').style.display = 'block';
+      alert("✔ 已退出管理模式");
+    }
+
+    // 检查登录状态
+    function checkLoginStatus() {
+        if(localStorage.getItem('adminAuth')) {
+            document.getElementById('adminStatus').style.display = 'flex';
+            document.getElementById('loginLink').style.display = 'none';
+        }
+    }
+    //localStorage.setItem('adminAuth', 'true'); // 状态存储
+    document.getElementById('loginModal').classList.remove('active'); // 关闭模态框
+    async function updateNavState() {
+        return new Promise(resolve => {
+            const authState = !!localStorage.getItem('adminAuth');
+            document.querySelectorAll('#adminStatus, #loginLink').forEach(el => {
+                el.style.display = el.id === 'adminStatus' && authState ? 'flex' :
+                                  el.id === 'loginLink' && !authState ? 'block' : 'none';
+            });
+            setTimeout(resolve, 0); // 确保DOM更新
+        });
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+          checkLoginStatus();
+          // 添加try-catch包裹
+          if(window.location.pathname.includes('GuanLi')) {
+              updateAdminPanel();
+          }
+      } catch (e) {
+          console.error('初始化错误:', e);
+      }
+    });
+
+    async function encryptUsername(username) {
+        const encoder = new TextEncoder(); // 默认使用 UTF-8 编码
+        const data = encoder.encode(username);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        return Array.from(new Uint8Array(hashBuffer))
+            .map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    //async function getHash() {
+    //const key = "".toUpperCase();//此处为保密改为*号
+    //const encoder = new TextEncoder();
+    //const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(key));
+    //const hashArray = Array.from(new Uint8Array(hashBuffer));
+    //const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    //console.log("安全哈希值：", hashHex);
+    //console.log("⚠ 请立即清除控制台历史！");
+    //}
+    //getHash();
+    const CRYPTO_CONFIG = {
+        iv: crypto.getRandomValues(new Uint8Array(12)) // 生成随机IV
+    };
+
+    // 初始化检查
+    document.addEventListener('DOMContentLoaded', checkLoginStatus);
+    </script>
+</body>
+</html>
