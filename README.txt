@@ -1,2 +1,0 @@
-This project is for public welfare purposes only. Any use of this website for commercial purposes will be suspected of infringement
-Waring: The API of this project is extremely unstable and is a local API. Please use your own API
