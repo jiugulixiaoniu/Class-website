@@ -192,3 +192,4 @@ if payload['permission'] <= target_user['permission']:
 - 项目Issue追踪：[GitHub Issues]
 
 > 本项目持续维护中，欢迎教育领域从业者、学生开发者共同参与完善，让班级管理更智能、更便捷！
+> 本内容介绍为AI读取后生成，我也懒得再看，有的地方可能有问题，可以在问题反馈中提出修正，感谢！
