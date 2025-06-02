@@ -1,0 +1,426 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>班级官网管理系统</title>
+    <link rel="stylesheet" href="style/style_admin.css">
+    <!-- 引入 Markdown 编辑器 CSS 和 JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <div class="logo">ADMIN 8.2</div>
+            <nav class="admin-nav">
+                <a href="#member" class="nav-item">成员管理</a>
+                <a href="#access" class="nav-item">访问记录</a>
+                <a href="#register" class="nav-item">用户注册</a>
+                <a href="#article" class="nav-item">文章发布</a>
+            </nav>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main>
+            <!-- 成员管理模块 -->
+            <section id="member" class="content-section">
+                <h2>成员管理</h2>
+                <div class="member-list" id="memberList">
+                    <!-- 动态加载成员数据 -->
+                </div>
+            </section>
+
+            <!-- 访问记录模块 -->
+            <section id="access" class="content-section" style="display:none;">
+                <h2>访问记录 <button onclick="refreshAccessLogs()">刷新</button></h2>
+                <div class="access-log" id="accessLogs"></div>
+            </section>
+            <section id="register" class="content-section" style="display:none;">
+                <h2>成员注册</h2>
+                <!-- 用户注册模块 -->
+                <div class="register-form">
+                    <div class="input-group">
+                        <input type="text" id="newUsername" placeholder="用户名" required>
+                        <div class="error-message" id="usernameError"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" id="newDisplayName" placeholder="显示名称" required>
+                        <div class="error-message" id="displayNameError"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="newPassword" placeholder="初始密码" required>
+                        <div class="error-message" id="passwordError"></div>
+                    </div>
+
+                    <select id="newPermission">
+                        <option value="1">普通用户</option>
+                        <option value="2">二级用户</option>
+                        <option value="3">秩序员</option>
+                        <option value="4">管理员</option>
+                    </select>
+
+                    <button onclick="registerUser()">创建用户</button>
+                </div>
+            </section>
+            <!-- 文章发布模块 -->
+            <section id="article" class="content-section" style="display:none;">
+                <h2>文章发布</h2>
+                <div class="article-form register-form">
+                    <label for="articleTitle">文章标题</label>
+                    <input type="text" id="articleTitle" placeholder="文章标题" required>
+                    <label for="articleCategory">文章分类</label>
+                    <select id="articleCategory">
+                        <option value="Review">精彩回放</option>
+                        <option value="Notice">最新通告</option>
+                    </select>
+                    <textarea id="articleContent"></textarea>
+                    <button onclick="publishArticle()">发布文章</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // 初始化 Markdown 编辑器
+        const simplemde = new SimpleMDE({ element: document.getElementById("articleContent") });
+
+        // 初始化管理功能
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAdminAuth();
+            loadMembers();
+            loadAccessLogs();
+        });
+
+        // ================= 通用工具函数 =================
+        function getToken() {
+            const auth = JSON.parse(localStorage.getItem('adminAuth'));
+            return auth?.token || '';
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // ================= 权限验证 =================
+        async function checkAdminAuth() {
+            const auth = JSON.parse(localStorage.getItem('adminAuth'));
+            if (!auth || auth.permission < 3) {
+                showNotification('无管理权限', 'error');
+                setTimeout(() => window.location.href = 'main.html', 1500);
+            }
+        }
+
+        // ================= 成员管理功能 =================
+        async function loadMembers() {
+            try {
+                const res = await fetch('http://localhost:5000/api/users', {
+                    headers: {'Authorization': `Bearer ${getToken()}`}
+                });
+
+                if (!res.ok) {
+                    const error = await res.json();
+                    throw new Error(`加载失败: ${error.error || res.statusText}`);
+                }
+
+                const members = await res.json();
+                renderMembers(members);
+            } catch (error) {
+                console.error('加载成员失败:', error);
+                showNotification(error.message, 'error');
+            }
+        }
+
+        function renderMembers(members) {
+            const container = document.getElementById('memberList');
+            const auth = JSON.parse(localStorage.getItem('adminAuth')) || {};
+            const currentPermission = auth.permission || 0;
+
+            container.innerHTML = members.map(member => `
+                <div class="member-card ${member.banned ? 'banned' : ''}">
+                    <div>
+                        <h3>${member.display_name}</h3>
+                        <p>权限等级: ${member.permission}</p>
+                        <p>最后登录: ${
+                            member.last_login === '未知'
+                            ? '从未登录'
+                            : new Date(member.last_login).toLocaleString()
+                        }</p>
+                    </div>
+                    <div class="actions">
+                        <select
+                            onchange="handlePermissionChange('${member.display_name}', this.value)"
+                            ${(member.permission >= currentPermission) ? 'disabled' : ''}
+                        >
+                            ${[1, 2, 3, 4, 5].map(lv => `
+                                <option ${lv == member.permission ? 'selected' : ''}>${lv}</option>
+                            `).join('')}
+                        </select>
+                        <button
+                            onclick="toggleBan('${member.display_name}', ${!member.banned})"
+                            ${(member.permission >= currentPermission) ? 'disabled' : ''}
+                        >
+                            ${member.banned ? '解封' : '封禁'}
+                        </button>
+                        <button
+                            onclick="deleteUser('${member.display_name}')"
+                            ${(member.permission >= currentPermission) ? 'disabled' : ''}
+                            style="background: #ff4444; margin-left: 0.5rem;"
+                        >
+                            删除
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ================= 成员操作函数 =================
+        async function handlePermissionChange(display_name, value) {
+            await updateUserField(display_name, 'permission', parseInt(value));
+        }
+
+        async function toggleBan(display_name,banStatus) {
+            await updateUserField(display_name,'banned', banStatus);
+        }
+
+        async function updateUserField(display_name, field, value) {
+            try {
+                const res = await fetch('http://localhost:5000/api/users/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getToken()}`
+                    },
+                    body: JSON.stringify({ display_name, field, value })
+                });
+
+                const result = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(result.error || `操作失败: ${res.status}`);
+                }
+
+                showNotification('操作成功', 'success');
+                loadMembers();
+            } catch (error) {
+                console.error('更新失败:', error);
+                showNotification(error.message, 'error');
+            }
+        }
+
+        // ================= 访问日志功能 =================
+        async function loadAccessLogs() {
+            try {
+                const res = await fetch('http://localhost:5000/api/access-logs', {
+                    headers: {'Authorization': `Bearer ${getToken()}`}
+                });
+
+                if (!res.ok) {
+                    const error = await res.json();
+                    throw new Error(`加载失败: ${error.error || res.statusText}`);
+                }
+
+                const logs = await res.json();
+                renderAccessLogs(logs);
+            } catch (error) {
+                console.error('加载访问记录失败:', error);
+                showNotification(error.message, 'error');
+            }
+        }
+
+        function renderAccessLogs(logs) {
+            const container = document.getElementById('accessLogs');
+            container.innerHTML = logs.map(log => `
+            <div class="log-entry">
+                <div class="log-time">${new Date(log.timestamp).toLocaleString()}</div>
+                <div class="log-details">
+                    <span class="log-ip">${log.ip}</span>
+                    <span class="log-method">${log.method}</span>
+                    <span class="log-path">${log.path}</span>
+                </div>
+            </div>
+        `).join('');
+        }
+
+        // ================= 用户注册功能 =================
+        async function registerUser() {
+
+            const newUser = {
+                username: document.getElementById('newUsername').value.trim(),
+                display_name: document.getElementById('newDisplayName').value.trim(),
+                password: document.getElementById('newPassword').value.trim(),
+                permission: parseInt(document.getElementById('newPermission').value)
+            };
+
+            try {
+                // 基础验证
+                if (!newUser.username || !newUser.password) {
+                    throw new Error('用户名和密码不能为空');
+                }
+
+                const res = await fetch('http://localhost:5000/api/users/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getToken()}`
+                    },
+                    body: JSON.stringify(newUser)
+                });
+
+                const result = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(result.error || '注册失败');
+                }
+
+                showNotification('用户创建成功', 'success');
+                document.getElementById('newUsername').value = '';
+                document.getElementById('newDisplayName').value = '';
+                document.getElementById('newPassword').value = '';
+                loadMembers();
+            } catch (error) {
+                console.error('注册失败:', error);
+                showNotification(error.message, 'error');
+            }
+            document.getElementById('newUsername').addEventListener('input', validateForm);
+            document.getElementById('newPassword').addEventListener('input', validateForm);
+
+            function validateForm() {
+                const username = document.getElementById('newUsername').value.trim();
+                const password = document.getElementById('newPassword').value.trim();
+
+                document.getElementById('usernameError').style.display =
+                    username ? 'none' : 'block';
+                document.getElementById('passwordError').style.display =
+                    password ? 'none' : 'block';
+
+                return username && password;
+            }
+
+        }
+        async function deleteUser(display_name) {
+            if (!confirm(`确定要永久删除用户 ${display_name} 吗？`)) return;
+
+            try {
+                const res = await fetch('http://localhost:5000/api/users/delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getToken()}`
+                    },
+                    body: JSON.stringify({ display_name })
+                });
+
+                const result = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(result.error || '删除失败');
+                }
+
+                showNotification('用户已删除', 'success');
+                loadMembers(); // 刷新列表
+            } catch (error) {
+                console.error('删除失败:', error);
+                showNotification(error.message, 'error');
+            }
+        }
+        // ================= 文章发布功能 =================
+        async function publishArticle() {
+    const title = document.getElementById('articleTitle').value;
+    const category = document.getElementById('articleCategory').value;
+            const content = simplemde.value();
+            const auth = JSON.parse(localStorage.getItem('adminAuth'));
+            if (auth.permission < 4) {
+                showNotification('只有4级及以上用户可以发布文章', 'error');
+                return;
+            }
+            try {
+                const res = await fetch('http://localhost:5000/api/articles/publish', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getToken()}`
+                    },
+                    body: JSON.stringify({ title, category, content })
+                });
+                const result = await res.json();
+                if (!res.ok) {
+                    throw new Error(result.error || '文章发布失败');
+                }
+                showNotification('文章发布成功', 'success');
+                document.getElementById('articleTitle').value = '';
+                simplemde.value('');
+            } catch (error) {
+                console.error('文章发布失败:', error);
+                showNotification(error.message, 'error');
+            }
+        }
+
+    function generateHTMLFile(title, category, content) {
+        const articleTitle = title.replace(/\s+/g, '-').toLowerCase();
+        const htmlContent = `
+            <!DOCTYPE html>
+            <html lang="zh-CN">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="stylesheet" href="../../style/article.css">
+                <title>${title} - 八年级二班</title>
+            </head>
+            <body>
+                <nav class="navbar">
+                    <h2>南平市建阳第二中学 | 八年级二班</h2>
+                    <div class="nav-links">
+                        <a href="../../main.html" class="nav-home">首页</a>
+                        <a href="../../main.html#about">关于</a>
+                        <a href="../../CopyRight.html">联系</a>
+                    </div>
+                </nav>
+                <div class="article-container">
+                    <h1 class="article-title">${title}</h1>
+                    <div class="article-content">
+                        ${content}
+                    </div>
+                </div>
+                <div class="footer">
+                    <p>© 2025 八年级二班 - 南平市建阳第二中学</p>
+                </div>
+            </body>
+            </html>
+        `;
+        const categoryDir = os.path.join(ARTICLE_DIR, category);
+        if (!fs.existsSync(categoryDir)) {
+            fs.mkdirSync(categoryDir);
+        }
+        const articlePath = os.path.join(categoryDir, `${articleTitle}.html`);
+        fs.writeFileSync(articlePath, htmlContent);
+    }
+
+        // ================= 其他功能 =================
+        function refreshAccessLogs() {
+            loadAccessLogs();
+            showNotification('访问记录已刷新', 'success');
+        }
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                document.getElementById(targetId).style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>

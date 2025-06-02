@@ -1,0 +1,72 @@
+<!-- Notice.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/style.css">
+    <title>最新通告 - 班级名字</title>
+</head>
+<body>
+    <div class="navbar">
+        <h2>班级名字</h2>
+        <div class="nav-links">
+            <a href="main.html" class="nav-home">首页</a>
+            <a href="main.html#about">关于</a>
+            <a href="CopyRight.html">联系</a>
+        </div>
+    </div>
+    <br>
+    <h1 style="text-align: center">最新通告</h1>
+    <div class="article-list">
+        <!-- 文章列表将通过JavaScript动态加载 -->
+    </div>
+    <script>
+        // 获取 token 的函数
+        function getToken() {
+            const auth = JSON.parse(localStorage.getItem('adminAuth'));
+            return auth?.token || '';
+        }
+
+        // 显示通知的函数
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        async function loadArticles() {
+            try {
+                const res = await fetch('http://localhost:5000/api/articles/list', {
+                    headers: { 'Authorization': `Bearer ${getToken()}` }
+                });
+                if (!res.ok) {
+                    const error = await res.json();
+                    throw new Error(`加载文章列表失败: ${error.error || res.statusText}`);
+                }
+                const articles = await res.json();
+                const articleList = document.querySelector('.article-list');
+                articleList.innerHTML = '';
+                articles.forEach(article => {
+                    if (article.category === 'Notice') {
+                        const articleItem = document.createElement('div');
+                        articleItem.className = 'link-card';
+                        articleItem.innerHTML = `
+                            <h3>${article.title}</h3>
+                            <p>发布日期: ${new Date(article.timestamp).toLocaleDateString('zh-CN')}</p>
+                            <a href="Article/${article.path}" target="_blank">阅读文章</a>
+                        `;
+                        articleList.appendChild(articleItem);
+                    }
+                });
+            } catch (error) {
+                console.error('加载文章列表失败:', error);
+                showNotification('加载文章列表失败', 'error');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadArticles);
+    </script>
+</body>
+</html>
