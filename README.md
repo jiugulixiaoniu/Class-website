@@ -1,3 +1,5 @@
+[点击前往正在更新的版本项目](https://github.com/jiugulixiaoniu/CWBS-ClassWebsite-V2.0 "正在更新的版本项目")
+
 # 班级官网管理系统：详细项目指南
 
 ## 项目全景概述
